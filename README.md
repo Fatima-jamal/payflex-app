@@ -1,17 +1,28 @@
-# Java Login App – DevOps Final Semester Project
+# Multi-Stage Dockerized Java Login App – DevOps Final Year Project
 
-This repository contains the infrastructure-as-code (IaC) and Dockerized application setup for deploying a **Java-based Login Web Application** on AWS using **Terraform**, **Docker**, and **EC2 Auto Scaling**, with a PostgreSQL **RDS**, **Metabase BI Tool**, and **Application Load Balancer (ALB)** configured for high availability and observability.
+This repository contains the complete codebase and infrastructure setup for deploying a secure, scalable, and production-ready Java Login Web Application using Docker and Terraform on AWS. It follows DevOps best practices with CI/CD automation, Infrastructure as Code (IaC), monitoring via Metabase, and domain-secured access using Route 53 and ACM.
+
+---
+
+## Project Overview
+
+* **Application:** Java Spring Boot-based login system
+* **Infrastructure:** Provisioned using modular Terraform
+* **Containers:** Built using multi-stage Dockerfiles for optimized deployment
+* **Cloud Provider:** AWS (EC2, ALB, RDS, VPC, IAM, Route 53, ACM)
+* **Monitoring:** Metabase BI tool connected to PostgreSQL RDS
+* **CI/CD:** Implemented using GitHub Actions
 
 ---
 
 ## Project Objectives
 
-* Build a scalable and secure containerized deployment of a Java web application.
-* Use Terraform modules for reusable infrastructure provisioning.
-* Configure Auto Scaling and ALB for high availability.
-* Secure databases in private subnets and restrict access via Security Groups.
-* Deploy Metabase for real-time data analysis.
-* Use a custom domain with HTTPS support via ALB + Route 53 + ACM.
+* Deploy a secure and scalable containerized Java application.
+* Use Terraform modules for reusable and maintainable infrastructure provisioning.
+* Automate deployment using GitHub Actions.
+* Use ALB with HTTPS support and a custom domain for secure access.
+* Configure Auto Scaling for fault-tolerance and availability.
+* Monitor application activity using Metabase linked to RDS.
 
 ---
 
@@ -19,131 +30,158 @@ This repository contains the infrastructure-as-code (IaC) and Dockerized applica
 
 ```bash
 .
-├── terraform/                  # Main Terraform root module
-│   ├── main.tf                 # Calls all modules
-│   ├── variables.tf            # Global variables
-│   ├── terraform.tfvars        # Variable values
+├── terraform/                  # Terraform root configuration
+│   ├── main.tf                 # Entry point that includes all modules
+│   ├── variables.tf            # Global variables definition
+│   ├── terraform.tfvars        # Variable values for AWS setup
 │   └── scripts/
-│       └── user_data.sh        # EC2 bootstrap script
+│       └── user_data.sh        # Startup script for EC2 instances
 │
-├── modules/
-│   ├── vpc/                    # VPC, subnets, routing
-│   ├── ec2/                    # Launch template for Java App EC2
-│   ├── asg/                    # Auto Scaling Group
-│   ├── alb/                    # Application Load Balancer
-│   ├── rds/                    # PostgreSQL RDS setup
+├── modules/                    # Reusable Terraform modules
+│   ├── vpc/                    # Networking resources
+│   ├── ec2/                    # EC2 Launch template configuration
+│   ├── asg/                    # Auto Scaling Group definition
+│   ├── alb/                    # Application Load Balancer with HTTPS
+│   ├── rds/                    # PostgreSQL RDS configuration
 │   ├── rds_sg/                 # Security Group for RDS
-│   ├── security_groups/        # EC2 & ALB security groups
-│   └── metabase/               # EC2 deployment for Metabase
+│   ├── security_groups/        # Security rules for all components
+│   └── metabase/               # EC2 resource for Metabase BI tool
 │
-└── docker/
-    └── Dockerfile              # Dockerized Java App
+├── docker/
+│   └── Dockerfile              # Multi-stage Dockerfile for Java application
+│
+├── .github/workflows/
+│   ├── maven.yml               # CI workflow for building JAR
+│   └── docker-build.yml        # Docker build & push workflow
+│
+├── src/                        # Java source code
+├── pom.xml                     # Maven configuration file
+└── README.md                   # Project documentation
 ```
 
 ---
 
-## Tools & Technologies
+## Key Technologies Used
 
-* **AWS EC2, RDS, ALB, VPC, IAM, Route 53, ACM**
-* **Terraform (modular structure)**
-* **Docker (multi-stage build)**
-* **Metabase (BI Tool)**
-* **PostgreSQL (RDS)**
-* **Nginx reverse proxy (optional)**
+* **Java & Spring Boot** – Backend development
+* **Docker** – Multi-stage containerization
+* **Terraform** – Infrastructure provisioning
+* **AWS Services:**
+
+  * EC2 (Auto Scaling)
+  * ALB (HTTPS Load Balancer)
+  * RDS (PostgreSQL)
+  * Route 53 + ACM (Domain and SSL)
+  * IAM, VPC, Subnets, and Security Groups
+* **Metabase** – BI tool for real-time dashboarding
+* **GitHub Actions** – Continuous Integration and Delivery
 
 ---
 
 ## Features Implemented
 
-* Java Login App containerized and deployed via EC2 Auto Scaling
-* PostgreSQL RDS in private subnets, inaccessible publicly
-* ALB configured with listener on port 8080 → target group → EC2
-* Metabase deployed on EC2 in public subnet with SSH Key access
-* Security Groups allow only necessary traffic:
-
-  * ALB → EC2 (port 8080)
-  * EC2 → RDS via internal SG
-* Infrastructure provisioned using isolated and reusable Terraform modules
-* Docker image pushed to DockerHub, pulled by EC2 at runtime
+* Java Login App built and containerized using Maven and Docker
+* Image pushed to DockerHub via GitHub Actions
+* EC2 instances launched with Auto Scaling Group
+* ALB with HTTPS (via ACM certificate) for secure access
+* PostgreSQL RDS hosted in private subnets
+* Metabase deployed on a separate EC2 instance to visualize login data
+* Complete Infrastructure as Code using modular Terraform
+* Security best practices enforced via IAM roles and SG whitelisting
 
 ---
 
-## Security Best Practices
+## CI/CD Workflow
 
-* No public IP assigned to RDS
-* EC2 access via SSH key pair only (restricted to user IP)
-* Metabase exposed only via its own EC2 instance
-* Security Groups whitelisted per role
-* IAM roles used only where needed
+### GitHub Actions:
+
+* `maven.yml`: Builds the JAR file from Java code on every push
+* `docker-build.yml`: Builds and pushes Docker image to DockerHub
+
+These workflows run automatically on every code update to ensure continuous integration and availability.
+
+---
+
+## Security Best Practices Followed
+
+* RDS instance is in private subnet (not publicly accessible)
+* EC2 SSH access restricted using `.pem` key and specific IP whitelisting
+* IAM roles are scoped minimally for Terraform and EC2 actions
+* All traffic controlled using tight Security Group rules
+* HTTPS enabled for secure web access via ALB + ACM
 
 ---
 
 ## Pre-requisites
 
-* AWS Account with Access & Secret keys configured
-* SSH Key Pair (`FJMS`) created in `us-west-1`
-* Docker installed and DockerHub account set up
-* Terraform >= 1.0.0 installed
+* AWS Account with Access Key and Secret Key
+* SSH Key Pair named `FJMS` (for EC2 access)
+* Terraform CLI installed (v1.0+)
+* Docker installed and DockerHub account created
+* GitHub repository connected to Actions
 
 ---
 
-## Deployment Instructions
+## Deployment Guide
 
 ```bash
-# 1. Configure AWS credentials
+# Step 1: Configure AWS CLI
 aws configure
 
-# 2. Navigate to Terraform directory
+# Step 2: Go to Terraform directory
 cd terraform
 
-# 3. Initialize Terraform modules
+# Step 3: Initialize Terraform
 terraform init
 
-# 4. Review deployment plan
+# Step 4: Review execution plan
 terraform plan
 
-# 5. Apply infrastructure changes
+# Step 5: Deploy resources
 terraform apply
 ```
 
+Once complete, Terraform will output:
+
+* ALB DNS (for Java App)
+* Metabase EC2 public IP
+
 ---
 
-## Accessing the Application
+## Application Access
 
-Once Terraform apply completes:
+* **Java Login App:** Open ALB DNS URL in browser (e.g. [http://your-alb-dns:8080](http://your-alb-dns:8080))
+* **Metabase:** http\://\[EC2-Public-IP]:3000
+* **PostgreSQL RDS:** Access via SSH tunnel using EC2 (private subnet)
 
-* Access the **Java Login App** via the DNS of ALB (output in `terraform output`)
-* Access **Metabase** using EC2 public IP (SSH or browser)
-* Use SSH to connect and inspect logs if needed
+---
+
+## Monitoring & Observability
+
+* Use AWS Console for:
+
+  * EC2 Health (Auto Scaling Group status)
+  * ALB Logs & Target Group Health
+  * RDS performance metrics
+* Use Metabase for:
+
+  * Real-time dashboarding
+  * Password usage charts
+  * User sign-up trends and login patterns
 
 ---
 
 ## Teardown Instructions
 
 ```bash
-# Destroy all infrastructure
+# Destroy infrastructure
 terraform destroy
 ```
 
-> Note: RDS teardown may take time due to database backup/retention operations.
-
----
-
-## Monitoring & Observability
-
-* AWS Console → EC2 Auto Scaling Groups → Monitor instance count
-* ALB Metrics (HTTP requests, Target health)
-* Metabase BI tool connected to PostgreSQL RDS for insights
-
----
-
-## Documentation
-
-* For a step-by-step deployment process, see [DEPLOYMENT\_GUIDE.md](./DEPLOYMENT_GUIDE.md).
-* Ensure all `.tf` modules are inside respective folders under `modules/` directory.
+Note: RDS may take several minutes to delete due to final snapshot settings.
 
 ---
 
 ## Final Remarks
 
-This project showcases a production-ready architecture for deploying containerized applications on AWS using Infrastructure as Code. Feel free to fork, extend, and enhance as needed.
+This project demonstrates a complete cloud-native deployment pipeline using modern DevOps tools and AWS services. It covers containerization, continuous delivery, infrastructure automation, secure access, and observability via dashboards. Ideal for showcasing DevOps and cloud architecture proficiency in real-world scenarios.
