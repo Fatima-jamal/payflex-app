@@ -13,7 +13,7 @@
     <groupId>com.devopsrealtime</groupId>
     <artifactId>dptweb</artifactId>
     <version>1.0</version>
-    <packaging>war</packaging> <!-- change from jar to war -->
+    <packaging>war</packaging>
     <name>dptweb</name>
     <description>DPT DevOps project for Spring Boot</description>
 
@@ -22,11 +22,13 @@
     </properties>
 
     <dependencies>
+        <!-- Web + Spring MVC -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
 
+        <!-- PostgreSQL JDBC driver -->
         <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
@@ -44,12 +46,14 @@
             <artifactId>jstl</artifactId>
         </dependency>
 
+        <!-- External Tomcat support -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-tomcat</artifactId>
             <scope>provided</scope>
         </dependency>
 
+        <!-- Unit Testing -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
@@ -66,6 +70,7 @@
     <build>
         <finalName>dptweb</finalName>
         <plugins>
+            <!-- WAR Plugin -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-war-plugin</artifactId>
@@ -73,10 +78,6 @@
                 <configuration>
                     <failOnMissingWebXml>false</failOnMissingWebXml>
                 </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
         </plugins>
     </build>
