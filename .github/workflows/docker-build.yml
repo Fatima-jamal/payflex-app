@@ -28,4 +28,5 @@ jobs:
           context: .
           file: ./Dockerfile
           push: true
-          tags: fatimajamal/java-login-app:latest
+          no-cache: true
+          tags: fatimajamal779/java-login-app:latest
