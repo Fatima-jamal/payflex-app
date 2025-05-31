@@ -1,5 +1,3 @@
-# modules/bi_ec2/main.tf
-
 resource "aws_security_group" "metabase_sg" {
   name        = var.metabase_sg_name
   description = "Allow HTTP access to Metabase"
