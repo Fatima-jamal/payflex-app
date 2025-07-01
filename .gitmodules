@@ -1,0 +1,15 @@
+[submodule "payflex-backend"]
+  path = payflex-backend
+  url = https://github.com/Fatima-jamal/payflex-backend.git
+
+[submodule "payflex-frontend"]
+  path = payflex-frontend
+  url = https://github.com/Fatima-jamal/payflex-frontend.git
+
+[submodule "payflex-merchant-portal"]
+  path = payflex-merchant-portal
+  url = https://github.com/Fatima-jamal/payflex-merchant-portal.git
+
+[submodule "payflex-mms"]
+  path = payflex-mms
+  url = https://github.com/Fatima-jamal/payflex-mms.git
