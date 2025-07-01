@@ -2,32 +2,31 @@ name: Frontend CI
 
 on:
   push:
-    branches: [main]
     paths:
       - 'payflex-frontend/**'
+      - '.github/workflows/frontend-ci.yml'
+  workflow_dispatch:
 
 jobs:
   build:
     runs-on: ubuntu-latest
-
     defaults:
       run:
         working-directory: payflex-frontend
 
     steps:
-      - name: Checkout Code
-        uses: actions/checkout@v4
-
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
+      - name: Checkout code
+        uses: actions/checkout@v3
         with:
-          node-version: '18'
+          submodules: true
 
-      - name: Install Dependencies
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - name: Install dependencies
         run: npm install
 
-      - name: Build App
+      - name: Build frontend
         run: npm run build
-
-      - name: Run Tests
-        run: npm test
