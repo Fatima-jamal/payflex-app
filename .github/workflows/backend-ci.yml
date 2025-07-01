@@ -21,11 +21,8 @@ jobs:
       - name: Set up Java
         uses: actions/setup-java@v4
         with:
-          java-version: '17'
           distribution: 'temurin'
+          java-version: '17'
 
       - name: Build with Maven
-        run: mvn clean install -DskipTests
-
-      - name: Run Tests
-        run: mvn test
+        run: mvn clean install
