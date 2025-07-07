@@ -3,7 +3,8 @@ name: Backend CI
 on:
   push:
     paths:
-      - 'payflex-backend/**'
+      - '.gitmodules'
+      - 'payflex-backend'
       - '.github/workflows/backend-ci.yml'
   workflow_dispatch:
 
